@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Only these emails can read or write anything.
+    function approved() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() in [
+          "sophia_email_here@syr.edu",
+          "bdelac01@syr.edu", "cetaft@syr.edu", "ccampb46@syr.edu", "digrey@syr.edu",
+          "edpasic@syr.edu", "egmaingr@syr.edu", "jmedin21@syr.edu", "jlee485@syr.edu",
+          "jomelleb@syr.edu", "japiatt@syr.edu", "kwu158@syr.edu", "mjone101@syr.edu",
+          "mjgamez@syr.edu", "nsuharu@syr.edu", "nhayat@syr.edu", "nmarkmoo@syr.edu",
+          "wjmarqua@syr.edu", "whbent@syr.edu"
+        ];
+    }
+
+    match /{document=**} {
+      allow read, write: if approved();
+    }
+  }
+}
